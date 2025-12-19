@@ -1,0 +1,191 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/admin/admin-dashboard.css" />
+  </head>
+  <body>
+
+    <form action="/logout" method="POST" id="logout-form">
+      <button type="submit" id="logout-button">
+        Logout
+      </button>
+    </form>
+
+    <h1 id="page-heading">Admin's Dashboard</h1>
+    <p style="color:red">{{error}}</p>
+
+    <!--Start of creation-->
+
+    <div class="edit user" id="create-user-wrapper">
+
+      <img src="/images/close-button.png" id="create-close-button" />
+
+      <h1 id="create-user-heading">Create New User</h1>
+
+      <form action="user/create" method="POST">
+        <input
+          type="text"
+          placeholder="Full name"
+          id="create-name-box"
+          class="input-boxes"
+          name="fname"
+          style="margin-bottom: 30px"
+          required
+        />
+
+        <input
+          type="email"
+          placeholder="Email"
+          id="create-email-box"
+          class="input-boxes"
+          name="email"
+          style="margin-bottom: 30px"
+          required
+        />
+
+        <input
+          type="password"
+          placeholder="Password"
+          id="pass-box"
+          class="input-boxes"
+          name="password"
+          style="margin-bottom: 30px"
+          required
+        />
+        <img
+          src="/images/show-pass.png"
+          alt="Show password"
+          id="togglePassword"
+        />
+
+        <input
+          type="password"
+          placeholder="Confirm password"
+          id="confirm-pass-box"
+          class="input-boxes"
+          name="confirm_password"
+          style="margin-bottom: 30px"
+          required
+        />
+
+        <img
+          src="/images/show-pass.png"
+          alt="Show password"
+          id="toggleConfirmPassword"
+        />
+
+        <select name="role" id="create-role">
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+        </select>
+
+        <input type="submit" value="Create" id="create-button" />
+
+      </form>
+    </div>
+
+    <!--End of creation-->
+
+    <!--Start-->
+
+    <div class="edit user" id="user-edit-wrapper">
+
+      <img src="/images/close-button.png" id="close-button" />
+
+      <h1 id="user-edit-heading">Edit user details</h1>
+
+      <form action="user/edit" method="POST">
+        <input
+          type="text"
+          placeholder="Full name"
+          id="edit-name-box"
+          class="input-boxes"
+          name="fname"
+          style="margin-bottom: 30px"
+          required
+        />
+
+        <input
+          type="email"
+          placeholder="Email"
+          id="edit-email-box"
+          class="input-boxes"
+          name="email"
+          style="margin-bottom: 30px"
+          required
+        />
+
+        <select name="role" id="role">
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+        </select>
+
+        <input type="hidden" name="id" id="idInput" />
+
+        <input type="submit" value="Done" id="button" />
+
+        <!-- <a href="/user/login" id="login">Create ?</a> -->
+      </form>
+    </div>
+
+    <!--End-->
+    <section>
+
+      <form
+        style="width: 100%; display: flex; justify-content: center"
+        action="/admin"
+      >
+        <div id="search-section">
+
+          <img src="/images/add-button.svg" alt="Add user" id="add-button" />
+          <input
+            type="search"
+            placeholder="Search user"
+            id="search-bar"
+            name="search"
+            value="{{searchValue}}"
+          />
+
+          <button type="submit" id="search-button">
+            <img src="/images/search-button.png" id="search-button-img" />
+          </button>
+        </div>
+      </form>
+
+      <div id="user-list">
+        {{#each user}}
+          <div class="dashboard-box">
+            <div class="person">
+              <img src="/images/person.svg" alt="" class="profile-pic" />
+              <h3>{{this.name}}</h3>
+            </div>
+
+            <div class="modifyButtons-Wrapper">
+              <img
+                src="/images/edit.svg"
+                alt="edit user"
+                class="changeButtons editButton"
+                data-id="{{this._id}}"
+                data-name="{{this.name}}"
+                data-email="{{this.email}}"
+                data-role="{{this.role}}"
+              />
+              <img
+                src="/images/delete.png"
+                alt="delete user"
+                class="changeButtons deleteButton"
+                data-id="{{this._id}}"
+              />
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    </section>
+
+    <script src="/js/dashboard.js"></script>
+    <script src="/js/default.js"></script>
+
+  </body>
+</html>

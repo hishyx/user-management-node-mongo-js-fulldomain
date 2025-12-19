@@ -1,0 +1,28 @@
+.
+├── index.js                # Entry point (keep this)
+├── config/
+│   ├── db.js               # MongoDB connection
+│   └── session.js          # Session config
+├── models/
+│   └── User.js
+├── controllers/
+│   ├── auth.controller.js  # signup, login, logout
+│   └── admin.controller.js # admin CRUD users
+├── routes/
+│   ├── auth.routes.js
+│   ├── admin.routes.js
+│   └── main.routes.js
+├── middleware/
+│   ├── auth.middleware.js  # session check
+│   └── role.middleware.js  # admin check
+├── views/
+│   ├── admin/
+│   │   └── login.hbs
+│   └── user/
+│       ├── login.hbs
+│       └── signup.hbs
+├── public/
+│   ├── css/
+│   └── js/
+├── package.json
+├── .env

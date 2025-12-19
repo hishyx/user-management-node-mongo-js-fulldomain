@@ -1,0 +1,56 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Login</title>
+    <link href="/css/user/user-login.css" rel="stylesheet" />
+  </head>
+  <body>
+
+    <a href="/" class="back-btn">← Back</a>
+
+    <section>
+
+      <h1>User Login</h1>
+
+      <form action="/user/login" method="POST" autocomplete="off">
+
+        <input
+          type="email"
+          placeholder="Email"
+          id="email-box"
+          class="input-boxes"
+          name="email"
+          style="margin-bottom: 30px;"
+        />
+
+        <div class="password-wrapper">
+
+          <input
+            type="password"
+            placeholder="Password"
+            id="pass-box"
+            name="password"
+            class="input-boxes"
+          />
+
+          <img
+            src="/images/show-pass.png"
+            alt="Show password"
+            class="password-toggle"
+            id="togglePassword"
+          />
+        </div>
+
+        <p style="color: red;margin-bottom:-10px">{{error}}</p>
+
+        <input type="submit" value="Login" id="button" />
+        <a href="/user/signup" id="signup">Sign Up ?</a>
+
+      </form>
+
+    </section>
+
+    <script src="/js/default.js"></script>
+  </body>
+</html>

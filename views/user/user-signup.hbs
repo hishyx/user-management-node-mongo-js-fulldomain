@@ -1,0 +1,84 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Signup</title>
+    <link href="/css/user/user-signup.css" rel="stylesheet" />
+  </head>
+  <body>
+
+    <section>
+
+      <h1>User Signup</h1>
+
+      <form action="/user/signup" method="POST" autocomplete="off">
+
+        <input
+          type="text"
+          placeholder="Full name"
+          id="name-box"
+          class="input-boxes"
+          name="fname"
+          style="margin-bottom: 30px;"
+          required
+        />
+
+        <input
+          type="email"
+          placeholder="Email"
+          id="email-box"
+          class="input-boxes"
+          name="email"
+          style="margin-bottom: 30px;"
+          required
+        />
+
+        <div class="password-wrapper">
+          <input
+            type="password"
+            placeholder="Password"
+            id="pass-box"
+            class="input-boxes"
+            name="password"
+            required
+          />
+
+          <img
+            src="/images/show-pass.png"
+            id="togglePassword"
+            class="password-toggle"
+            alt="Toggle password visibility"
+          />
+        </div>
+
+        <div class="password-wrapper">
+          <input
+            type="password"
+            placeholder="Confirm password"
+            id="confirm-pass-box"
+            class="input-boxes"
+            name="confirm_password"
+            required
+          />
+
+          <img
+            src="/images/show-pass.png"
+            id="toggleConfirmPassword"
+            class="password-toggle"
+            alt="Toggle confirm password visibility"
+          />
+        </div>
+
+        <p style="color: red;margin-bottom:-10px">{{error}}</p>
+
+        <input type="submit" value="Signup" id="button" />
+
+        <a href="/user/login" id="login">Login ?</a>
+
+      </form>
+
+    </section>
+
+    <script src="/js/default.js"></script>
+  </body>
+</html>

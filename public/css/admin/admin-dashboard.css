@@ -1,0 +1,308 @@
+body {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: rgb(255, 123, 0);
+}
+
+#page-heading {
+  margin-bottom: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 50px;
+}
+
+section {
+  background-color: rgb(0, 0, 0);
+  height: 700px;
+  width: 800px;
+  padding: 0px 20px 0px 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 20px;
+}
+
+.dashboard-box {
+  background-color: rgb(0, 225, 255);
+  height: 100px;
+  width: 90%;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 40px;
+  border-radius: 30px;
+  flex-shrink: 0;
+}
+
+.changeButtons {
+  width: 35px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+h3 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 23px;
+}
+
+.person {
+  display: flex;
+  align-items: center;
+}
+
+.profile-pic {
+  width: 50px;
+  background-color: white;
+  border-radius: 30px;
+  margin-right: 25px;
+}
+
+/* edit user */
+
+#user-edit-wrapper {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  background-color: rgb(166, 0, 255);
+  padding: 100px 70px;
+  border-radius: 40px;
+  z-index: 1000;
+}
+
+#user-edit-heading {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 33px;
+}
+
+form {
+  margin-top: 40px;
+}
+
+.input-boxes {
+  padding-left: 10px;
+  height: 40px;
+  display: block;
+  width: 330px;
+  border-radius: 15px;
+  border: none;
+}
+
+#button {
+  margin-top: 30px;
+  border-radius: 30px;
+  padding: 13px 40px;
+  background-color: black;
+  border: none;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  cursor: pointer;
+}
+
+#login {
+  display: inline-block;
+  color: rgb(3, 3, 3);
+  margin-left: 7px;
+}
+
+#close-button {
+  width: 40px;
+  position: absolute;
+  right: 30px;
+  top: 30px;
+  cursor: pointer;
+}
+
+#role {
+  padding-left: 10px;
+  height: 40px;
+  display: block;
+  width: 330px;
+  border-radius: 15px;
+  border: none;
+  background-color: white;
+}
+
+#search-bar {
+  background-color: rgb(255, 255, 255);
+  height: 50px;
+  margin-bottom: 10px;
+  width: 80%;
+  border-radius: 30px;
+  border: none;
+  padding-left: 20px;
+}
+
+#search-button,
+#search-button-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 30px;
+  background: none;
+  cursor: pointer;
+  border: none;
+}
+
+#search-section {
+  margin-bottom: 30px;
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  width: 100%;
+}
+
+#user-list {
+  overflow-y: scroll;
+  width: 100%;
+  border-top-right-radius: 30px;
+  border-top-left-radius: 30px;
+}
+
+#add-button {
+  width: 50px;
+  cursor: pointer;
+}
+
+/* User Creation Modal */
+#create-user-wrapper {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  background-color: rgb(166, 0, 255);
+  padding: 100px 70px;
+  border-radius: 40px;
+  z-index: 1000;
+}
+
+#create-user-heading {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 28px;
+  color: white;
+  margin-bottom: 20px;
+}
+
+form {
+  margin-top: 20px;
+}
+
+.input-boxes {
+  padding-left: 10px;
+  height: 40px;
+  display: block;
+  width: 330px;
+  border-radius: 15px;
+  border: none;
+}
+
+#create-button {
+  margin-top: 30px;
+  border-radius: 30px;
+  padding: 12px 30px;
+  background-color: black;
+  border: none;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  cursor: pointer;
+  width: 100%;
+}
+
+#create-close-button {
+  width: 40px;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  cursor: pointer;
+}
+
+#create-role {
+  padding-left: 10px;
+  height: 40px;
+  display: block;
+  width: 100%;
+  border-radius: 15px;
+  border: none;
+  background-color: white;
+}
+
+#create-idInput {
+  display: none;
+}
+
+#create-search-bar {
+  background-color: rgb(255, 255, 255);
+  height: 50px;
+  margin-bottom: 10px;
+  width: 80%;
+  border-radius: 30px;
+  border: none;
+  padding-left: 20px;
+}
+
+#create-search-button,
+#create-search-button-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 30px;
+  background: none;
+  cursor: pointer;
+  border: none;
+}
+
+#create-search-section {
+  margin-bottom: 30px;
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  width: 100%;
+}
+
+#create-user-list {
+  overflow-y: scroll;
+  width: 100%;
+  border-top-right-radius: 30px;
+  border-top-left-radius: 30px;
+}
+
+#create-add-button {
+  width: 50px;
+  cursor: pointer;
+}
+
+#logout-form {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 2000;
+}
+
+#logout-button {
+  padding: 10px 20px;
+  border-radius: 25px;
+  border: none;
+  background-color: black;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+#toggleConfirmPassword {
+  position: absolute;
+  right: 80px;
+  bottom: 260px;
+  cursor: pointer;
+}
+
+#togglePassword {
+  position: absolute;
+  right: 80px;
+  bottom: 330px;
+  cursor: pointer;
+}
