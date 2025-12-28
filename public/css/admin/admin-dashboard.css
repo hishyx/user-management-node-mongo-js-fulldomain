@@ -293,16 +293,9 @@ form {
   transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
-#toggleConfirmPassword {
-  position: absolute;
-  right: 80px;
-  bottom: 260px;
-  cursor: pointer;
-}
-
 #togglePassword {
   position: absolute;
   right: 80px;
-  bottom: 330px;
+  bottom: 263px;
   cursor: pointer;
 }

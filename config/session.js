@@ -4,8 +4,9 @@ import session from "express-session";
 import dotenv from "dotenv";
 dotenv.config();
 
-const sessionConfig = session({
+const adminSessionConfig = session({
   secret: process.env.SESSION_SECRET,
+  name: "admin.sid",
   resave: false,
   saveUninitialized: false,
   cookie: {
@@ -14,4 +15,15 @@ const sessionConfig = session({
   },
 });
 
-export default sessionConfig;
+const userSessionConfig = session({
+  secret: process.env.SESSION_SECRET,
+  name: "user.sid",
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60,
+  },
+});
+
+export { adminSessionConfig, userSessionConfig };

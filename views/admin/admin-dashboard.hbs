@@ -7,7 +7,7 @@
   </head>
   <body>
 
-    <form action="/logout" method="POST" id="logout-form">
+    <form action="/admin/logout" method="POST" id="logout-form">
       <button type="submit" id="logout-button">
         Logout
       </button>
@@ -24,7 +24,7 @@
 
       <h1 id="create-user-heading">Create New User</h1>
 
-      <form action="user/create" method="POST">
+      <form action="/admin/create" method="POST">
         <input
           type="text"
           placeholder="Full name"
@@ -60,21 +60,7 @@
           id="togglePassword"
         />
 
-        <input
-          type="password"
-          placeholder="Confirm password"
-          id="confirm-pass-box"
-          class="input-boxes"
-          name="confirm_password"
-          style="margin-bottom: 30px"
-          required
-        />
-
-        <img
-          src="/images/show-pass.png"
-          alt="Show password"
-          id="toggleConfirmPassword"
-        />
+        <input type="hidden" name="confirm_password" />
 
         <select name="role" id="create-role">
           <option value="user">User</option>
@@ -96,7 +82,7 @@
 
       <h1 id="user-edit-heading">Edit user details</h1>
 
-      <form action="user/edit" method="POST">
+      <form action="/admin/edit" method="POST">
         <input
           type="text"
           placeholder="Full name"

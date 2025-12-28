@@ -1,38 +1,56 @@
 import User from "../models/User.model.js";
-import bcrypt from "bcrypt";
+
+import { loginAdminService } from "../services/admin.services.js";
 
 //Admin Login controller
 
 export const loginAdmin = async (req, res) => {
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(req.body.email)) {
-    req.session.error = "Invalid email address";
+ 
+try{
+
+   const admin=await loginAdminService(req.body)
+   const { password, ...safeAdmin } = admin.toObject();
+   req.session.user=safeAdmin
+   res.redirect("/admin")
+
+}catch (err) {
+    req.session.error = err.message;
     return res.redirect("/admin/login");
   }
+};
 
-  let admin;
+export const getAdminLogin = (req, res) => {
+  res.render("admin/admin-login", { error: req.session.error });
+  req.session.error = "";
+};
 
-  try {
-    admin = await User.findOne({ email: req.body.email });
+export const getAdminDashboard = async (req, res) => {
+  let condition;
 
-    if (!admin) {
-      req.session.error = "Admin not found";
-      return res.redirect("/admin/login");
-    }
-
-    const isMatch = await bcrypt.compare(req.body.password, admin.password);
-
-    if (isMatch && admin.role === "admin") {
-      req.session.user = admin;
-      res.redirect("/admin");
-    } else if (isMatch && admin.role !== "admin") {
-      req.session.error = "Is not a Admin";
-      return res.redirect("/admin/login");
-    } else {
-      req.session.error = "Invalid credentials";
-      return res.redirect("/admin/login");
-    }
-  } catch (err) {
-    req.session.error = "Admin not found";
-    return res.redirect("/admin/login");
+  if (!req.query.search) {
+    condition = { role: "user" };
+  } else {
+    condition = {
+      role: "user",
+      name: { $regex: "^" + req.query.search, $options: "i" },
+    };
   }
+
+  const user = await User.find(condition);
+
+  res.render("admin/admin-dashboard", {
+    user: user,
+    error: req.session.error,
+    searchValue: req.query.search,
+  });
+};
+
+export const logoutAdmin = (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).json({ message: "Logout failed" });
+    }
+    res.clearCookie("admin.sid");
+    res.redirect("/admin/login");
+  });
 };

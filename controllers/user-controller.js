@@ -1,87 +1,69 @@
 import User from "../models/User.model.js";
 import bcrypt from "bcrypt";
+import {
+  createUserService,
+  loginUserService,
+} from "../services/user.services.js";
 
 export const createUser = async (req, res) => {
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(req.body.email)) {
-    req.session.error = "Invalid email address";
-    return res.redirect("/user/signup");
-  }
+  try {
+    const user = await createUserService(req.body, req.originalUrl);
+    const { password, ...safeUser } = user.toObject();
 
-  if (await User.findOne({ email: req.body.email })) {
-    req.session.error = "User with same email already exists";
-    return res.redirect("/user/signup");
-  }
-
-  const user = {};
-
-  if (req.body.password === req.body.confirm_password) {
-    user.name = req.body.fname;
-
-    user.email = req.body.email;
-
-    user.password = await bcrypt.hash(req.body.password, 10);
-
-    if (
-      req.path == "/user/create" ||
-      (req.session.user && req.session.user.role == "admin")
-    ) {
-      user.role = req.body.role;
+    if (req.originalUrl.includes("/admin")) {
+      res.redirect("/admin");
     } else {
-      user.role = "user";
+      req.session.user = safeUser;
+      res.redirect("/user");
     }
-    try {
-      await User.create(user);
+  } catch (err) {
+    req.session.error = err.message;
 
-      req.session.user = !req.session.user ? user : req.session.user;
-
-      if (req.session.user.role == "user") res.redirect("/user");
-      else res.redirect("/admin");
-    } catch (err) {
-      req.session.error = "Something went wrong";
-
-      if (req.session.user.role == "user") return res.redirect("/user/signup");
-      else return res.redirect("/admin");
-    }
-  } else {
-    req.session.error = "Passwords Doesnt Match";
-    if (req.session.user.role == "user") res.redirect("/user/signup");
-    else res.redirect("/admin");
+    if (req.originalUrl.includes("/user")) return res.redirect("/user/signup");
+    else return res.redirect("/admin");
   }
 };
 
 //Login user
 
 export const loginUser = async (req, res) => {
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(req.body.email)) {
-    req.session.error = "Invalid email address";
-    return res.redirect("/user/login");
-  }
-
-  let user;
-
   try {
-    user = await User.findOne({ email: req.body.email });
+    const user = await loginUserService(req.body);
+    const { password, ...safeUser } = user.toObject();
 
-    if (!user) {
-      req.session.error = "No user found";
-      return res.redirect("/user/login");
-    }
+    req.session.user = safeUser;
 
-    const isMatch = await bcrypt.compare(req.body.password, user.password);
-
-    if (isMatch && user.role === "user") {
-      req.session.user = user;
-      res.redirect("/user");
-    } else if (isMatch && user.role !== "user") {
-      req.session.error = "This account is not a user";
-
-      res.redirect("user/login");
-    } else {
-      req.session.error = "Invalid credentials";
-      return res.redirect("/user/login");
-    }
+    return res.redirect("/user");
   } catch (err) {
-    req.session.error = "No user found";
+    req.session.error = err.message;
     return res.redirect("/user/login");
   }
+};
+
+export const getUserHome = (req, res) => {
+  res.render("user/user-home", { name: req.session.user.name });
+};
+
+export const getUserLogin = (req, res) => {
+  res.render("user/user-login", { error: req.session.error });
+  req.session.error = "";
+};
+
+export const getUserSignup = (req, res) => {
+  res.render("user/user-signup", { error: req.session.error });
+  req.session.error = "";
+};
+
+//Logout user
+
+export const userLogout = (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).json({ message: "Logout failed" });
+    }
+
+    res.clearCookie("user.sid");
+
+    res.redirect("/user/");
+  });
 };

@@ -10,7 +10,7 @@ import inavlidHandlerRouter from "./routes/invalid-url-handler-route.js";
 
 //session config import
 
-import sessionConfig from "./config/session.js";
+import { adminSessionConfig, userSessionConfig } from "./config/session.js";
 
 //.env connection
 import dotenv from "dotenv";
@@ -35,14 +35,14 @@ server.use(express.static(path.join(__dirname, "public")));
 server.use(express.urlencoded({ extended: true }));
 server.use(nocache());
 
-server.use(sessionConfig);
+// server.use(sessionConfig);
 
 server.set("view engine", "hbs");
 server.set("views", path.join(__dirname, "views"));
 
-server.use("/", mainRouter);
-server.use("/user/", userRouter);
-server.use("/admin/", adminRouter);
+server.use("/admin/", adminSessionConfig, adminRouter);
+server.use("/user/", userSessionConfig, userRouter);
+server.use("/", userSessionConfig, mainRouter);
 
 server.use(inavlidHandlerRouter);
 

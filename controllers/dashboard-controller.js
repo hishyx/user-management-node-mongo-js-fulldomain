@@ -1,34 +1,27 @@
 import User from "../models/User.model.js";
+import { updateUserService,deleteUserService } from "../services/user.services.js";
 
 export const deleteUser = async (req, res) => {
-  if (!req.session.user || !req.session.user.role === "admin") {
-    return res.send("Error");
-  }
 
   try {
-    await User.deleteOne({ _id: req.body.userId });
-    res.redirect("/admin");
+
+   await deleteUserService(req.body,req.session.user)
+   res.redirect("/admin")
+    
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: err.message });
   }
 };
 
 export const updateUser = async (req, res) => {
-  if (!req.session.user || !req.session.user.role === "admin") {
-    return res.send("Error");
-  }
 
-  let user = {};
+  try{
+       await updateUserService(req.body,req.session.user)
+       return res.redirect("/admin")
 
-  user.name = req.body.fname;
-  user.email = req.body.email;
-  user.role - req.body.role;
+  }catch(err){
 
-  let userExists = await User.findById(req.body.id);
-
-  if (userExists) {
-    await User.findByIdAndUpdate(req.body.id, user);
-    res.redirect("/admin");
+    req.session.error=err.message
+    return res.redirect("/admin")
   }
 };

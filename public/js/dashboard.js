@@ -6,7 +6,7 @@ document.addEventListener("click", async (event) => {
   const userId = event.target.dataset.id;
 
   if (event.target.classList.contains("deleteButton")) {
-    const res = await fetch("/user/delete", {
+    const res = await fetch("/admin/delete", {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -38,31 +38,36 @@ if (hasDashboardBox) {
 
   const userEditPopup = document.getElementById("user-edit-wrapper");
 
-  const editButton = document.getElementsByClassName("changeButtons")[0];
+  // Delegated Event Listener for Edit Buttons
+  document.addEventListener("click", (e) => {
+    if (e.target.classList.contains("editButton")) {
+      e.stopImmediatePropagation();
+      const btn = e.target;
+      const userEditPopup = document.getElementById("user-edit-wrapper");
 
-  //Setting input box values
+      // Populate form
+      document.getElementById("edit-name-box").value = btn.dataset.name;
+      document.getElementById("edit-email-box").value = btn.dataset.email;
+      
+      // select role safely
+      const roleSelect = document.getElementById("role");
+      if(roleSelect) {
+          roleSelect.value = btn.dataset.role;
+      }
 
-  document.getElementById("edit-name-box").value = editButton.dataset.name;
-  document.getElementById("edit-email-box").value = editButton.dataset.email;
+      document.getElementById("idInput").value = btn.dataset.id;
 
-  if (editButton.dataset.role == "user") {
-    document.getElementsByTagName("option")[0].selected = true;
-  } else {
-    document.getElementsByTagName("option")[1].selected = true;
-  }
+      // Show popup
+      userEditPopup.style.display = "block";
+    }
+  });
 
-  document.getElementById("idInput").value = editButton.dataset.id;
-
-  //Events over popup box
+  // Events over popup box
 
   closeButton.addEventListener("click", () => {
     userEditPopup.style.display = "none";
   });
 
-  editButton.addEventListener("click", (e) => {
-    e.stopPropagation();
-    userEditPopup.style.display = "block";
-  });
 
   document.addEventListener("click", (e) => {
     if (userEditPopup.style.display == "block") {
