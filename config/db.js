@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { logger } from "../utils/logger.js";
 
 //.env connection
 import dotenv from "dotenv";
@@ -7,9 +8,9 @@ dotenv.config();
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
-    console.log("Database Connected");
+    logger.info("Database Connected");
   } catch (err) {
-    console.log("Mongo connection error:", err);
+    logger.error("Mongo connection error:", err);
     process.exit(1);
   }
 };

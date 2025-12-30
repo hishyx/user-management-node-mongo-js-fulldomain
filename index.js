@@ -5,16 +5,13 @@ import { fileURLToPath } from "url";
 import userRouter from "./routes/user-route.js";
 import adminRouter from "./routes/admin-route.js";
 import mainRouter from "./routes/main-route.js";
+import { logger } from "./utils/logger.js";
 
 import inavlidHandlerRouter from "./routes/invalid-url-handler-route.js";
 
 //session config import
 
 import { adminSessionConfig, userSessionConfig } from "./config/session.js";
-
-//.env connection
-import dotenv from "dotenv";
-dotenv.config();
 
 //import connectDB
 import connectDB from "./config/db.js";
@@ -46,4 +43,6 @@ server.use("/", userSessionConfig, mainRouter);
 
 server.use(inavlidHandlerRouter);
 
-server.listen(4555);
+server.listen(4555, () => {
+  logger.info("Server is running on port 4555");
+});
