@@ -7,47 +7,62 @@
   </head>
   <body>
 
-    <a href="/" class="back-btn">← Back</a>
-    <section>
+    <a href="/" class="back-btn" aria-label="Back to welcome page">Back</a>
+    <main class="auth-shell">
+      <section class="auth-card" aria-labelledby="admin-login-heading">
+        <div class="auth-brand">
+          <span class="brand-mark">UM</span>
+          <span>Admin Console</span>
+        </div>
 
-      <h1>Admin Login</h1>
+        <div class="auth-header">
+          <p class="eyebrow">Administrator</p>
+          <h1 id="admin-login-heading">Sign in securely</h1>
+          <p>Manage users, roles, and account access.</p>
+        </div>
 
-      <form action="/admin/login" method="post" autocomplete="off">
+        <form action="/admin/login" method="post" autocomplete="off">
 
-        <input
-          type="email"
-          placeholder="Email"
-          id="email-box"
-          class="input-boxes"
-          name="email"
-          style="margin-bottom: 30px;"
-        />
-
-        <div class="password-wrapper">
-
+          <label for="email-box">Email address</label>
           <input
-            type="password"
-            placeholder="Password"
+            type="email"
+            placeholder="admin@example.com"
+            id="email-box"
+            class="input-boxes"
+            name="email"
+            value="admin@system.com"
+          />
+
+          <label for="pass-box">Password</label>
+          <div class="password-wrapper">
+
+            <input
+              type="password"
+              placeholder="Enter your password"
             id="pass-box"
             name="password"
             class="input-boxes"
+            value="2007"
           />
 
-          <img
-            src="/images/show-pass.png"
-            alt="Show password"
-            class="password-toggle"
-            id="togglePassword"
-          />
+            <img
+              src="/images/show-pass.png"
+              alt="Show password"
+              class="password-toggle"
+              id="togglePassword"
+            />
 
-        </div>
+          </div>
 
-        <p style="color: red;margin-bottom:-10px">{{error}}</p>
+          {{#if error}}
+            <p class="form-message error-message" role="alert">{{error}}</p>
+          {{/if}}
 
-        <input type="submit" value="Login" id="button" />
+          <input type="submit" value="Login" id="button" />
 
-      </form>
-    </section>
+        </form>
+      </section>
+    </main>
 
     <script src="/js/default.js"></script>
   </body>

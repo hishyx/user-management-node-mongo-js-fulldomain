@@ -7,61 +7,108 @@
   </head>
   <body>
 
-    <form action="/admin/logout" method="POST" id="logout-form">
-      <button type="submit" id="logout-button">
-        Logout
-      </button>
-    </form>
+    <div class="dashboard-shell">
+      <aside class="sidebar">
+        <div class="brand-row">
+          <span class="brand-mark">UM</span>
+          <div>
+            <strong>User Management</strong>
+            <small>Admin Console</small>
+          </div>
+        </div>
 
-    <h1 id="page-heading">Admin's Dashboard</h1>
-    <p style="color:red">{{error}}</p>
+        <nav aria-label="Admin navigation">
+          <a href="/admin" class="nav-link active">Dashboard</a>
+        </nav>
+
+        <form action="/admin/logout" method="POST" id="logout-form">
+          <button type="submit" id="logout-button">
+            Logout
+          </button>
+        </form>
+      </aside>
+
+      <main class="dashboard-main">
+        <header class="dashboard-header">
+          <div>
+            <p class="eyebrow">Administration</p>
+            <h1 id="page-heading">Admin Dashboard</h1>
+            <p class="page-subtitle">Search, create, edit, and manage user accounts.</p>
+          </div>
+        </header>
+
+        {{#if error}}
+          <div class="toast error-toast" role="alert">{{error}}</div>
+        {{/if}}
+
+        <section class="stats-grid" aria-label="Dashboard statistics">
+          <article class="stat-card">
+            <span class="stat-label">Total users</span>
+            <strong id="total-users">0</strong>
+            <span class="stat-note">Current filtered list</span>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">Directory status</span>
+            <strong>Active</strong>
+            <span class="stat-note">Ready for updates</span>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">Access type</span>
+            <strong>User roles</strong>
+            <span class="stat-note">User and admin supported</span>
+          </article>
+        </section>
 
     <!--Start of creation-->
 
-    <div class="edit user" id="create-user-wrapper">
+    <div class="modal edit user" id="create-user-wrapper" role="dialog" aria-modal="true" aria-labelledby="create-user-heading">
 
-      <img src="/images/close-button.png" id="create-close-button" />
+      <button type="button" class="modal-close" id="create-close-button" aria-label="Close create user form">&times;</button>
 
       <h1 id="create-user-heading">Create New User</h1>
 
       <form action="/admin/create" method="POST">
+        <label for="create-name-box">Full name</label>
         <input
           type="text"
           placeholder="Full name"
           id="create-name-box"
           class="input-boxes"
           name="fname"
-          style="margin-bottom: 30px"
           required
         />
 
+        <label for="create-email-box">Email address</label>
         <input
           type="email"
           placeholder="Email"
           id="create-email-box"
           class="input-boxes"
           name="email"
-          style="margin-bottom: 30px"
           required
         />
 
-        <input
-          type="password"
-          placeholder="Password"
-          id="pass-box"
-          class="input-boxes"
-          name="password"
-          style="margin-bottom: 30px"
-          required
-        />
-        <img
-          src="/images/show-pass.png"
-          alt="Show password"
-          id="togglePassword"
-        />
+        <label for="pass-box">Password</label>
+        <div class="password-wrapper">
+          <input
+            type="password"
+            placeholder="Password"
+            id="pass-box"
+            class="input-boxes"
+            name="password"
+            required
+          />
+          <img
+            src="/images/show-pass.png"
+            alt="Show password"
+            class="password-toggle"
+            id="togglePassword"
+          />
+        </div>
 
         <input type="hidden" name="confirm_password" />
 
+        <label for="create-role">Role</label>
         <select name="role" id="create-role">
           <option value="user">User</option>
           <option value="admin">Admin</option>
@@ -76,33 +123,34 @@
 
     <!--Start-->
 
-    <div class="edit user" id="user-edit-wrapper">
+    <div class="modal edit user" id="user-edit-wrapper" role="dialog" aria-modal="true" aria-labelledby="user-edit-heading">
 
-      <img src="/images/close-button.png" id="close-button" />
+      <button type="button" class="modal-close" id="close-button" aria-label="Close edit user form">&times;</button>
 
       <h1 id="user-edit-heading">Edit user details</h1>
 
       <form action="/admin/edit" method="POST">
+        <label for="edit-name-box">Full name</label>
         <input
           type="text"
           placeholder="Full name"
           id="edit-name-box"
           class="input-boxes"
           name="fname"
-          style="margin-bottom: 30px"
           required
         />
 
+        <label for="edit-email-box">Email address</label>
         <input
           type="email"
           placeholder="Email"
           id="edit-email-box"
           class="input-boxes"
           name="email"
-          style="margin-bottom: 30px"
           required
         />
 
+        <label for="role">Role</label>
         <select name="role" id="role">
           <option value="user">User</option>
           <option value="admin">Admin</option>
@@ -112,20 +160,25 @@
 
         <input type="submit" value="Done" id="button" />
 
-        <!-- <a href="/user/login" id="login">Create ?</a> -->
       </form>
     </div>
 
     <!--End-->
-    <section>
+    <section class="content-panel" aria-labelledby="users-heading">
+      <div class="section-header">
+        <div>
+          <h2 id="users-heading">Users</h2>
+          <p>Manage registered user accounts.</p>
+        </div>
+      </div>
 
       <form
-        style="width: 100%; display: flex; justify-content: center"
+        class="search-form"
         action="/admin"
       >
         <div id="search-section">
 
-          <img src="/images/add-button.svg" alt="Add user" id="add-button" />
+          <button type="button" id="add-button" aria-label="Add user">+</button>
           <input
             type="search"
             placeholder="Search user"
@@ -134,41 +187,86 @@
             value="{{searchValue}}"
           />
 
-          <button type="submit" id="search-button">
-            <img src="/images/search-button.png" id="search-button-img" />
+          <button type="submit" id="search-button" aria-label="Search users">
+            <span id="search-button-img">Search</span>
           </button>
         </div>
       </form>
 
-      <div id="user-list">
-        {{#each user}}
-          <div class="dashboard-box">
-            <div class="person">
-              <img src="/images/person.svg" alt="" class="profile-pic" />
-              <h3>{{this.name}}</h3>
-            </div>
+      <div id="user-list" class="table-wrap">
+        <table class="user-table">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th class="actions-column">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each user}}
+              <tr class="dashboard-box">
+                <td>
+                  <div class="person">
+                    <span class="profile-pic" aria-hidden="true">
+                      <img src="/images/person.svg" alt="" />
+                    </span>
+                    <h3>{{this.name}}</h3>
+                  </div>
+                </td>
+                <td>{{this.email}}</td>
+                <td><span class="role-pill">{{this.role}}</span></td>
+                <td>
+                  <div class="modifyButtons-Wrapper">
+                    <button
+                      type="button"
+                      class="changeButtons editButton"
+                      data-id="{{this._id}}"
+                      data-name="{{this.name}}"
+                      data-email="{{this.email}}"
+                      data-role="{{this.role}}"
+                      aria-label="Edit {{this.name}}"
+                    >Edit</button>
+                    <button
+                      type="button"
+                      class="changeButtons deleteButton"
+                      data-id="{{this._id}}"
+                      aria-label="Delete {{this.name}}"
+                    >Delete</button>
+                  </div>
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+        <div class="empty-state" id="empty-state">
+          <h3>No users found</h3>
+          <p>Try another search or create a new user.</p>
+        </div>
+      </div>
 
-            <div class="modifyButtons-Wrapper">
-              <img
-                src="/images/edit.svg"
-                alt="edit user"
-                class="changeButtons editButton"
-                data-id="{{this._id}}"
-                data-name="{{this.name}}"
-                data-email="{{this.email}}"
-                data-role="{{this.role}}"
-              />
-              <img
-                src="/images/delete.png"
-                alt="delete user"
-                class="changeButtons deleteButton"
-                data-id="{{this._id}}"
-              />
-            </div>
-          </div>
-        {{/each}}
+      <div class="pagination-bar" aria-label="Pagination">
+        <span id="pagination-summary">Showing current results</span>
+        <div id="pagination-controls">
+          <button type="button" id="prev-page">Previous</button>
+          <span id="page-numbers"></span>
+          <button type="button" id="next-page">Next</button>
+        </div>
       </div>
     </section>
+
+      </main>
+    </div>
+
+    <div class="modal" id="delete-confirm-wrapper" role="dialog" aria-modal="true" aria-labelledby="delete-confirm-heading">
+      <h1 id="delete-confirm-heading">Delete user?</h1>
+      <p>This action will remove the selected user account.</p>
+      <div class="modal-actions">
+        <button type="button" id="cancel-delete-button">Cancel</button>
+        <button type="button" id="confirm-delete-button">Delete user</button>
+      </div>
+    </div>
+    <div class="modal-backdrop" id="modal-backdrop"></div>
 
     <script src="/js/dashboard.js"></script>
     <script src="/js/default.js"></script>

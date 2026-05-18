@@ -7,49 +7,64 @@
   </head>
   <body>
 
-    <a href="/" class="back-btn">← Back</a>
+    <a href="/" class="back-btn" aria-label="Back to welcome page">Back</a>
 
-    <section>
-
-      <h1>User Login</h1>
-
-      <form action="/user/login" method="POST" autocomplete="off">
-
-        <input
-          type="email"
-          placeholder="Email"
-          id="email-box"
-          class="input-boxes"
-          name="email"
-          style="margin-bottom: 30px;"
-        />
-
-        <div class="password-wrapper">
-
-          <input
-            type="password"
-            placeholder="Password"
-            id="pass-box"
-            name="password"
-            class="input-boxes"
-          />
-
-          <img
-            src="/images/show-pass.png"
-            alt="Show password"
-            class="password-toggle"
-            id="togglePassword"
-          />
+    <main class="auth-shell">
+      <section class="auth-card" aria-labelledby="login-heading">
+        <div class="auth-brand">
+          <span class="brand-mark">UM</span>
+          <span>User Management</span>
         </div>
 
-        <p style="color: red;margin-bottom:-10px">{{error}}</p>
+        <div class="auth-header">
+          <p class="eyebrow">User Portal</p>
+          <h1 id="login-heading">Welcome back</h1>
+          <p>Sign in to continue to your account workspace.</p>
+        </div>
 
-        <input type="submit" value="Login" id="button" />
-        <a href="/user/signup" id="signup">Sign Up ?</a>
+        <form action="/user/login" method="POST" autocomplete="off">
 
-      </form>
+          <label for="email-box">Email address</label>
+          <input
+            type="email"
+            placeholder="you@example.com"
+            id="email-box"
+            class="input-boxes"
+            name="email"
+            value="luffy@onepiece.com"
+          />
 
-    </section>
+          <label for="pass-box">Password</label>
+          <div class="password-wrapper">
+
+            <input
+              type="password"
+              placeholder="Enter your password"
+              id="pass-box"
+              name="password"
+              class="input-boxes"
+              value="1452007"
+            />
+
+            <img
+              src="/images/show-pass.png"
+              alt="Show password"
+              class="password-toggle"
+              id="togglePassword"
+            />
+          </div>
+
+          {{#if error}}
+            <p class="form-message error-message" role="alert">{{error}}</p>
+          {{/if}}
+
+          <input type="submit" value="Login" id="button" />
+          <p class="auth-switch">New here? <a href="/user/signup" id="signup">Create an account</a></p>
+
+        </form>
+
+      </section>
+    </main>
 
     <script src="/js/default.js"></script>
   </body>

@@ -1,104 +1,204 @@
-//Delete user
+const container = document.querySelector("#user-list");
+const rows = Array.from(document.querySelectorAll(".dashboard-box"));
+const backdrop = document.getElementById("modal-backdrop");
+const totalUsers = document.getElementById("total-users");
+const emptyState = document.getElementById("empty-state");
+const paginationSummary = document.getElementById("pagination-summary");
+const paginationControls = document.getElementById("pagination-controls");
+const pageNumbers = document.getElementById("page-numbers");
+const prevPageButton = document.getElementById("prev-page");
+const nextPageButton = document.getElementById("next-page");
 
-document.addEventListener("click", async (event) => {
-  if (!event.target.classList.contains("changeButtons")) return;
+let pendingDeleteUserId = null;
+let currentPage = 1;
+const rowsPerPage = 5;
 
-  const userId = event.target.dataset.id;
+function openModal(modal) {
+  if (!modal) return;
+  modal.classList.add("is-open");
+  modal.style.display = "block";
+  if (backdrop) backdrop.classList.add("is-open");
+}
 
-  if (event.target.classList.contains("deleteButton")) {
-    const res = await fetch("/admin/delete", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId: userId,
-      }),
+function closeModal(modal) {
+  if (!modal) return;
+  modal.classList.remove("is-open");
+  modal.style.display = "none";
+
+  const hasOpenModal = document.querySelector(".modal.is-open");
+  if (!hasOpenModal && backdrop) backdrop.classList.remove("is-open");
+}
+
+function closeAllModals() {
+  document.querySelectorAll(".modal").forEach((modal) => closeModal(modal));
+  pendingDeleteUserId = null;
+}
+
+async function deleteUser(userId) {
+  const res = await fetch("/admin/delete", {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      userId: userId,
+    }),
+  });
+
+  if (!res.ok) {
+    console.error("Delete failed");
+    return;
+  }
+
+  location.reload();
+}
+
+if (totalUsers) {
+  totalUsers.textContent = rows.length;
+}
+
+if (container && emptyState && rows.length === 0) {
+  emptyState.style.display = "block";
+}
+
+function renderPagination() {
+  if (!paginationControls || !pageNumbers || !prevPageButton || !nextPageButton) {
+    return;
+  }
+
+  const pageCount = Math.ceil(rows.length / rowsPerPage);
+
+  if (rows.length === 0) {
+    paginationControls.style.display = "none";
+    if (paginationSummary) paginationSummary.textContent = "No results to show";
+    return;
+  }
+
+  paginationControls.style.display = pageCount > 1 ? "flex" : "none";
+  currentPage = Math.min(currentPage, pageCount);
+
+  const startIndex = (currentPage - 1) * rowsPerPage;
+  const endIndex = Math.min(startIndex + rowsPerPage, rows.length);
+
+  rows.forEach((row, index) => {
+    const isVisible = index >= startIndex && index < endIndex;
+    row.style.display = isVisible ? "table-row" : "none";
+  });
+
+  if (paginationSummary) {
+    paginationSummary.textContent = `Showing ${startIndex + 1}-${endIndex} of ${rows.length} users`;
+  }
+
+  prevPageButton.disabled = currentPage === 1;
+  nextPageButton.disabled = currentPage === pageCount;
+
+  pageNumbers.innerHTML = "";
+
+  for (let page = 1; page <= pageCount; page += 1) {
+    const pageButton = document.createElement("button");
+    pageButton.type = "button";
+    pageButton.textContent = page;
+    pageButton.className = page === currentPage ? "active-page" : "";
+    pageButton.setAttribute("aria-label", `Go to page ${page}`);
+    pageButton.addEventListener("click", () => {
+      currentPage = page;
+      renderPagination();
     });
 
-    if (!res.ok) {
-      console.error("Delete failed");
-      return;
-    }
-
-    location.reload();
+    pageNumbers.appendChild(pageButton);
   }
-});
+}
 
-//Checking if there is users in list
-
-const container = document.querySelector("#user-list");
-
-const hasDashboardBox = container.querySelector(".dashboard-box") !== null;
-
-//Edit user popup
-
-if (hasDashboardBox) {
-  const closeButton = document.getElementById("close-button");
-
-  const userEditPopup = document.getElementById("user-edit-wrapper");
-
-  // Delegated Event Listener for Edit Buttons
-  document.addEventListener("click", (e) => {
-    if (e.target.classList.contains("editButton")) {
-      e.stopImmediatePropagation();
-      const btn = e.target;
-      const userEditPopup = document.getElementById("user-edit-wrapper");
-
-      // Populate form
-      document.getElementById("edit-name-box").value = btn.dataset.name;
-      document.getElementById("edit-email-box").value = btn.dataset.email;
-      
-      // select role safely
-      const roleSelect = document.getElementById("role");
-      if(roleSelect) {
-          roleSelect.value = btn.dataset.role;
-      }
-
-      document.getElementById("idInput").value = btn.dataset.id;
-
-      // Show popup
-      userEditPopup.style.display = "block";
-    }
-  });
-
-  // Events over popup box
-
-  closeButton.addEventListener("click", () => {
-    userEditPopup.style.display = "none";
-  });
-
-
-  document.addEventListener("click", (e) => {
-    if (userEditPopup.style.display == "block") {
-      if (userEditPopup.contains(e.target)) return;
-
-      document.getElementById("user-edit-wrapper").style.display = "none";
+if (prevPageButton) {
+  prevPageButton.addEventListener("click", () => {
+    if (currentPage > 1) {
+      currentPage -= 1;
+      renderPagination();
     }
   });
 }
 
-//User creation
+if (nextPageButton) {
+  nextPageButton.addEventListener("click", () => {
+    const pageCount = Math.ceil(rows.length / rowsPerPage);
+    if (currentPage < pageCount) {
+      currentPage += 1;
+      renderPagination();
+    }
+  });
+}
+
+renderPagination();
+
+const closeButton = document.getElementById("close-button");
+const userEditPopup = document.getElementById("user-edit-wrapper");
+
+document.addEventListener("click", (event) => {
+  const target = event.target;
+
+  if (target.classList.contains("editButton")) {
+    event.stopPropagation();
+
+    document.getElementById("edit-name-box").value = target.dataset.name;
+    document.getElementById("edit-email-box").value = target.dataset.email;
+
+    const roleSelect = document.getElementById("role");
+    if (roleSelect) {
+      roleSelect.value = target.dataset.role;
+    }
+
+    document.getElementById("idInput").value = target.dataset.id;
+    openModal(userEditPopup);
+  }
+
+  if (target.classList.contains("deleteButton")) {
+    event.stopPropagation();
+    pendingDeleteUserId = target.dataset.id;
+    openModal(document.getElementById("delete-confirm-wrapper"));
+  }
+});
+
+if (closeButton) {
+  closeButton.addEventListener("click", () => closeModal(userEditPopup));
+}
 
 const creationCloseButton = document.getElementById("create-close-button");
-
 const userCreatePopup = document.getElementById("create-user-wrapper");
-
 const addUserButton = document.getElementById("add-button");
 
-creationCloseButton.addEventListener("click", () => {
-  userCreatePopup.style.display = "none";
-});
+if (creationCloseButton) {
+  creationCloseButton.addEventListener("click", () => closeModal(userCreatePopup));
+}
 
-addUserButton.addEventListener("click", (e) => {
-  e.stopPropagation();
-  userCreatePopup.style.display = "block";
-});
+if (addUserButton) {
+  addUserButton.addEventListener("click", (event) => {
+    event.stopPropagation();
+    openModal(userCreatePopup);
+  });
+}
 
-document.addEventListener("click", (e) => {
-  if (userCreatePopup.style.display == "block") {
-    if (userCreatePopup.contains(e.target)) return;
+const cancelDeleteButton = document.getElementById("cancel-delete-button");
+const confirmDeleteButton = document.getElementById("confirm-delete-button");
 
-    userCreatePopup.style.display = "none";
+if (cancelDeleteButton) {
+  cancelDeleteButton.addEventListener("click", () => {
+    closeModal(document.getElementById("delete-confirm-wrapper"));
+    pendingDeleteUserId = null;
+  });
+}
+
+if (confirmDeleteButton) {
+  confirmDeleteButton.addEventListener("click", () => {
+    if (pendingDeleteUserId) deleteUser(pendingDeleteUserId);
+  });
+}
+
+if (backdrop) {
+  backdrop.addEventListener("click", closeAllModals);
+}
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    closeAllModals();
   }
 });

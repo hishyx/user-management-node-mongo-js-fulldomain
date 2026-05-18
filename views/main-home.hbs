@@ -7,17 +7,25 @@
   </head>
 
   <body>
-    <section>
-      <h1>Welcome</h1>
-      <p>Please continue to your account</p>
+    <main class="welcome-shell">
+      <section class="welcome-card" aria-labelledby="welcome-heading">
+        <div class="brand-row">
+          <span class="brand-mark">UM</span>
+          <span>User Management</span>
+        </div>
 
-      <a href="/user" style="text-decoration: none;">
-        <button id="user-button">Continue as User</button>
-      </a>
+        <p class="eyebrow">Portfolio-ready SaaS console</p>
+        <h1 id="welcome-heading">Welcome</h1>
+        <p>Continue to your account or access the admin console.</p>
 
-      <footer>
-        <a href="/admin/login">Admin login</a>
-      </footer>
-    </section>
+        <a href="/user" class="primary-link">
+          <button id="user-button">Continue as User</button>
+        </a>
+
+        <footer>
+          <a href="/admin/login">Admin login</a>
+        </footer>
+      </section>
+    </main>
   </body>
 </html>

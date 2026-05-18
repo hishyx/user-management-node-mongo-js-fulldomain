@@ -9,17 +9,32 @@
   </head>
   <body>
 
-    <section>
+    <main class="user-shell">
+      <nav class="topbar" aria-label="User navigation">
+        <div class="brand-row">
+          <span class="brand-mark">UM</span>
+          <span>User Portal</span>
+        </div>
 
-      <h1>Hey {{name}}</h1>
+        <form action="/user/logout" method="POST">
+          <input type="submit" value="Logout" id="button" />
+        </form>
+      </nav>
 
-      <form action="/user/logout" method="POST">
+      <section class="home-panel" aria-labelledby="home-heading">
+        <p class="eyebrow">Signed in</p>
+        <h1 id="home-heading">Hey {{name}}</h1>
+        <p>Your account session is active. You can continue using the portal or sign out securely.</p>
 
-        <input type="submit" value="Logout" id="button" />
-
-      </form>
-
-    </section>
+        <div class="status-card">
+          <span class="status-dot"></span>
+          <div>
+            <h2>Account ready</h2>
+            <p>Authentication is working and your profile is available.</p>
+          </div>
+        </div>
+      </section>
+    </main>
 
   </body>
 </html>
